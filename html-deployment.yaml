@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: html-deployment
+  labels:
+    app: html
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: html
+  template:
+    metadata:
+      labels:
+        app: html
+    spec:
+      containers:
+      - name: html
+        image: kaique5247/front:2.1
+        ports:
+        - containerPort: 5000
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 5000
+            httpHeaders:
+            - name: Custom-Header
+              value: K8S-Probe
+          initialDelaySeconds: 3
+          periodSeconds: 3

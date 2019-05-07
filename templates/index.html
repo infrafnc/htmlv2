@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock title %}
+{% block content %}
+<div class="container">
+        <div class="row">
+                <div class="col-sm-12 col-md-6 col-md-offset-3">
+                        <div class="panel panel-primary" style="border-color: #ff0043;">
+                                <div class="panel-heading" style="background-image:none;background: #ff0043; border-color: #ff0043;">
+                                        <h1 class="panel-title clearfix">Bem vindo</h1>
+                                </div>
+                                <div class="panel-body">
+                                        <form action="/postendpoint" method="post">
+                                                <div class="form-group">
+                                                        <label for="exampleInputEmail1">E-mail</label>
+                                                        <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email" name="emailform">
+                                                </div>
+                                                <div class="form-group">
+                                                        <label for="exampleInputPassword1">Nome</label>
+                                                        <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Nome" name=nomeform>
+                                                </div>
+                                                <button type="submit" class="btn btn-primary pullright" style="background-image:none;background: #ff0043; border-color: #ff0043;">Enviar</button>
+                                        </form>
+                                </div>
+                        </div>
+                </div>
+        </div>
+</div>
+{% endblock content %}
+
