@@ -12,7 +12,7 @@ node {
     // Configuramos os estágios
     
     stage "Build"
-    	docker.withRegistry('kaique5247', 'DockerHub') {
+    	docker.withRegistry('kaique5247/front', 'DockerHub') {
         	def customImage = docker.build("${imageName}")
 
     stage "Push"
