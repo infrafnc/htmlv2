@@ -1,5 +1,4 @@
 pipeline {
-  checkout scm
   environment {
     registry = "kaique5247/front"
     registryCredential = 'DockerHub'
