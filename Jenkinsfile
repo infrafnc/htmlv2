@@ -1,33 +1,29 @@
-pipeline {
-  environment {
-    registry = "kaique5247/front"
-    registryCredential = 'DockerHub'
-    dockerImage = ''
-  }
-  agent any
-  stages {
-    stage('Building image') {
-      steps{
-        script {
-          dockerImage = docker.build registry + ":$BUILD_NUMBER"
+node {
+    checkout scm
+
+    // Pega o commit id para ser usado de tag (versionamento) na imagem
+    sh "git rev-parse --short HEAD > commit-id"
+    tag = readFile('commit-id').replace("\n", "").replace("\r", "")
+    
+    // configura o nome da aplicação, o endereço do repositório e o nome da imagem com a versão
+    appName = "htmlv2"
+    imageName = "${appName}:${tag}"
+
+    // Configuramos os estágios
+    
+    stage "Build"
+    	def customImage = docker.build("${imageName}")
+
+    stage "Push"
+    	docker.withRegistry("kaique5247/front", DockerHub) {
+        customImage.push()
         }
-      }
-    }
-    stage('Deploy') {
-      steps{
-        script {
-          docker.withRegistry( '', registryCredential ) {
-            dockerImage.push()
-            sh "kubectl set image deployment htmlv2 htmlv2=${dockerImage} --record"
-        	sh "kubectl rollout status deployment/htmlv2"
-          }
+
+    stage "Deploy PROD"
+        input "Deploy to PROD?"
+        docker.withRegistry("kaique5247/front", DockerHub) {
+        customImage.push('latest')
         }
-      }
-    }
-    stage('Remove Unused docker image') {
-      steps{
-        sh "docker rmi $registry:$BUILD_NUMBER"
-      }
-    }
-  }
+        sh "kubectl set image deployment htmlv2 htmlv2=${imageName} --record"
+        sh "kubectl rollout status deployment/htmlv2"
 }
