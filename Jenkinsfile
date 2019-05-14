@@ -12,7 +12,9 @@ node {
     // Configuramos os estágios
     
     stage "Build"
+	withKubernetes( serverUrl: 'https://192.168.0.51', credentialsId: 'k8s-token'){
 	sh "kubectl get pods"
+	}
     	def customImage = docker.build("${imageName}")
 
     stage "Push"
