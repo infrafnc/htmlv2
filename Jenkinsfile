@@ -12,6 +12,7 @@ node {
     // Configuramos os estágios
     
     stage "Build"
+	sh "kubectl get pods"
     	def customImage = docker.build("${imageName}")
 
     stage "Push"
